@@ -11,35 +11,24 @@ namespace ProyectoAPI.Controllers
 
     public class ProductController : ControllerBase
     {
-        [HttpGet("/productos")]
+        [HttpGet("/Product")]
 
         public List<Product> getProductsFromDB() {
-            return Handlers.ProductHandler.getProductsFromDB();
+            return ProductHandler.getProductsFromDB();
         }
         [HttpPost]
 
         public void createProduct(Product product) {
-            ProductHandler.createProduct(product);
+            ProductHandler.insertProduct(product);
         }
         [HttpPut]
         public void updateProduct(Product product) {
             ProductHandler.updateProduct(product);
         }
         [HttpDelete("{id}")]
-        public void deleteProduct([FromBody]int id) {
+        public void deleteProduct([FromRoute]int id) {
             SoldProductHandler.deleteSoldProduct(id);
             ProductHandler.deleteProduct(id);
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }

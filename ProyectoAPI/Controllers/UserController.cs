@@ -12,6 +12,7 @@ namespace ProyectoAPI.Controllers
         [HttpPut]
         public void ModifyUser([FromBody]User usr)
         {
+            UserHandler.ModifyUser(usr);
         }
 
         [HttpGet("/User")]
@@ -20,7 +21,5 @@ namespace ProyectoAPI.Controllers
         {
             return UserHandler.GetUsersFromDB();
         }
-        
-
     }
 }

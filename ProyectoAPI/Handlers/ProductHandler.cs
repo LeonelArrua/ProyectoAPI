@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ProyectoAPI.Models;
@@ -16,8 +17,6 @@ namespace ProyectoAPI.Handlers
 
         internal static List<Product> getProductsFromDB(long id)
         {
-
-
             List<Product> products = new List<Product>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -39,6 +38,26 @@ namespace ProyectoAPI.Handlers
             }
             return products;
         }
+        internal static Product getProductFromDB(long id)
+        {
+            Product products = new Product();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand($"SELECT * From Producto WHERE Id='{id}' ", connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    products = new Product(reader.GetInt64(0), reader.GetString(1), reader.GetDecimal(2), reader.GetDecimal(3), reader.GetInt32(4), reader.GetInt64(5));
+                }
+
+            }
+            return products;
+        }
+
+
 
         internal static List<Product> getProductsFromDB()
         {
@@ -64,7 +83,7 @@ namespace ProyectoAPI.Handlers
             return products;
         }
 
-        public static int createProduct(Product product) {
+        public static int insertProduct(Product product) {
 
             using (SqlConnection connect = new SqlConnection(connectionString))
             {
@@ -98,7 +117,8 @@ namespace ProyectoAPI.Handlers
             }
         }
 
-        public static int deleteProduct(long id) {
+        public static int deleteProduct(long id) 
+        {
 
             using (SqlConnection connect = new SqlConnection(connectionString)) {
 
@@ -108,14 +128,13 @@ namespace ProyectoAPI.Handlers
                 return command.ExecuteNonQuery();
             }
 
-
-
-
-
         }
-
-
-
+        public static int UpdateProductStock(long id, int soldamount)
+        {
+            Product product = getProductFromDB(id);
+            product.Stock -= soldamount;
+            return updateProduct(product);
+        }
     }
 }
 

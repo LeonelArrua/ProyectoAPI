@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProyectoAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -30,6 +31,35 @@ namespace ProyectoAPI.Handlers
                 }
             }
             return sales;
+        }
+
+        public static long insertSale(Sale sale) {
+            using (SqlConnection connect = new SqlConnection(connectionString))
+            {
+
+                SqlCommand command = new SqlCommand("INSERT INTO Venta(Comentarios,IdUsuario)" + "VALUES (@_comments,@_userId); SELECT @@IDENTITY", connect);
+                command.Parameters.Add(new SqlParameter("_comments", System.Data.SqlDbType.VarChar) { Value = sale.Comments });
+                command.Parameters.Add(new SqlParameter("_userId", System.Data.SqlDbType.VarChar) { Value = sale.UserId});
+                connect.Open();
+                return Convert.ToInt64(command.ExecuteScalar());
+            }
+        }
+        public static void insertSales(long UserId, List<Product> soldproducts) {
+
+            using (SqlConnection connect = new SqlConnection(connectionString)) {
+                Sale sale = new Sale();
+                sale.UserId = UserId;
+                sale.Comments = "";
+                long SaleId = insertSale(sale);
+                foreach (Product product in soldproducts) { 
+                        SoldProduct newsoldproduct = new SoldProduct();
+                        newsoldproduct.ProductId = product.Id;
+                        newsoldproduct.SalelId = SaleId;
+                        newsoldproduct.Stock = product.Stock;
+                        SoldProductHandler.insertSoldProduct(newsoldproduct);
+                        ProductHandler.UpdateProductStock(product.Id, product.Stock);
+                }
+            }
         }
     }
 }

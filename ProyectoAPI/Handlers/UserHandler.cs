@@ -79,28 +79,24 @@ namespace ProyectoAPI.Handlers
             }
             return auxuser;
         }
-        public static void ModifyUser(User usr) 
+        public static int ModifyUser(User usr) 
          {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var query = @"UPDATE Usuario SET Nombre = @_firstName, Apellido = @_lastName, NombreUsuario = @_userName, Contraseña = @_password, Mail = @_email WHERE Id= @_id";
+                SqlCommand command = new SqlCommand("UPDATE Usuario SET Nombre = @_firstName, Apellido = @_lastName, NombreUsuario = @_userName, Contraseña = @_password, Mail = @_email WHERE Id= @_id",connection);
 
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(query, connection)) 
-                { 
                 command.Parameters.Add(new SqlParameter("_id", SqlDbType.BigInt) {Value = usr.Id});
                 command.Parameters.Add(new SqlParameter("_firstName", SqlDbType.VarChar) { Value = usr.FirstName });
                 command.Parameters.Add(new SqlParameter("_lastName", SqlDbType.VarChar) { Value = usr.LastName });
                 command.Parameters.Add(new SqlParameter("_userName", SqlDbType.VarChar) { Value = usr.UserName});
                 command.Parameters.Add(new SqlParameter("_password", SqlDbType.VarChar) { Value = usr.Password});
                 command.Parameters.Add(new SqlParameter("_email", SqlDbType.VarChar) { Value = usr.Email });
-                command.ExecuteNonQuery();
-                }
-                connection.Close();
+               
+
+                connection.Open();
+                return command.ExecuteNonQuery();
             }
         }
 
     }
 }
-//UPDATE [SistemaGestion].[dbo].[Usuario] SET [Contraseña] = 'MINUEVACONTRASENIA' WHERE[Nombre] = 'Ernesto'
