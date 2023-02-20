@@ -13,14 +13,13 @@ namespace ProyectoAPI.Handlers
 {
     internal static class UserHandler
     {
-        public static string connectionString = "Data Source=DESKTOP-KTPC59F\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+     
         public static User GetUserFromDB(int id)
         {
 
             User auxuser = new User();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Usuario WHERE id='{id}' ", connection);
                 connection.Open();
@@ -38,8 +37,8 @@ namespace ProyectoAPI.Handlers
         internal static List<User> GetUsersFromDB()
         {
             List<User> auxuserlist = new List<User>();
-   
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Usuario ", connection);
                 connection.Open();
@@ -65,7 +64,7 @@ namespace ProyectoAPI.Handlers
 
             User auxuser = new User();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Usuario WHERE NombreUsuario='{user}' AND Contraseña='{password}' ", connection);
                 connection.Open();
@@ -81,7 +80,7 @@ namespace ProyectoAPI.Handlers
         }
         public static int ModifyUser(User usr) 
          {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand("UPDATE Usuario SET Nombre = @_firstName, Apellido = @_lastName, NombreUsuario = @_userName, Contraseña = @_password, Mail = @_email WHERE Id= @_id",connection);
 

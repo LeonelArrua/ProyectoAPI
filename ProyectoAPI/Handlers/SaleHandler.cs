@@ -10,12 +10,11 @@ namespace ProyectoAPI.Handlers
 {
     internal static class SaleHandler
     {
-        public static string connectionString = "Data Source=DESKTOP-KTPC59F\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+      
         public static List<Sale> getSalesFromDB(long id)
         {
             List<Sale> sales = new List<Sale>();
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * FROM Venta WHERE Venta.IdUsuario ='{id}'", connection);
                 connection.Open();
@@ -34,7 +33,7 @@ namespace ProyectoAPI.Handlers
         }
 
         public static long insertSale(Sale sale) {
-            using (SqlConnection connect = new SqlConnection(connectionString))
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring))
             {
 
                 SqlCommand command = new SqlCommand("INSERT INTO Venta(Comentarios,IdUsuario)" + "VALUES (@_comments,@_userId); SELECT @@IDENTITY", connect);
@@ -46,7 +45,7 @@ namespace ProyectoAPI.Handlers
         }
         public static void insertSales(long UserId, List<Product> soldproducts) {
 
-            using (SqlConnection connect = new SqlConnection(connectionString)) {
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring)) {
                 Sale sale = new Sale();
                 sale.UserId = UserId;
                 sale.Comments = "";

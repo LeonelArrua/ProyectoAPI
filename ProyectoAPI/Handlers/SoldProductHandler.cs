@@ -10,14 +10,13 @@ namespace ProyectoAPI.Handlers
 {
     internal static class SoldProductHandler
     {
-        public static string connectionString = "Data Source=DESKTOP-KTPC59F\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+       
         public static List<Product> getSoldProductFromDB(long id)
         {
 
             List<Product> soldproducts = new List<Product>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * FROM Producto INNER JOIN ProductoVendido ON Producto.Id = ProductoVendido.IdProducto WHERE Producto.idUsuario='{id}' ", connection);
                 connection.Open();
@@ -41,7 +40,7 @@ namespace ProyectoAPI.Handlers
 
             List<Product> soldproducts = new List<Product>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * FROM Producto INNER JOIN ProductoVendido ON Producto.Id = ProductoVendido.IdProducto", connection);
                 connection.Open();
@@ -63,17 +62,16 @@ namespace ProyectoAPI.Handlers
 
         public static int deleteSoldProduct(long id)
         {
-            using (SqlConnection connect = new SqlConnection(connectionString))
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring))
             {
-
-                SqlCommand command = new SqlCommand("DELETE FROM ProductoVendido INNER JOIN Producto ON ProductoVendido.IdProducto = Producto.Id WHERE Id=@idprod", connect);
+                SqlCommand command = new SqlCommand("DELETE FROM ProductoVendido WHERE IdProducto =@idprod", connect);
                 command.Parameters.Add(new SqlParameter("idprod", System.Data.SqlDbType.BigInt) { Value = id });
                 connect.Open();
                 return command.ExecuteNonQuery();
             }
         }
         public static int insertSoldProduct(SoldProduct soldproduct) {
-            using (SqlConnection connect = new SqlConnection(connectionString))
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand("INSERT INTO ProductoVendido(Stock,IdProducto,IdVenta)" + "VALUES (@_stock,@_idproduct,@_idsale)", connect);
 
@@ -90,20 +88,3 @@ namespace ProyectoAPI.Handlers
 
     }
 }
-/*public static int createProduct(Product product)
-{
-
-    using (SqlConnection connect = new SqlConnection(connectionString))
-    {
-        SqlCommand command = new SqlCommand("INSERT INTO Producto(Descripciones,Costo,PrecioVenta,Stock,IdUsuario)" + "VALUES (@_description,@_price,@_salePrice,@_stock,@_userId)", connect);
-
-        command.Parameters.Add(new SqlParameter("_description", System.Data.SqlDbType.VarChar) { Value = product.Description });
-        command.Parameters.Add(new SqlParameter("_price", System.Data.SqlDbType.Decimal) { Value = product.Price });
-        command.Parameters.Add(new SqlParameter("_salePrice", System.Data.SqlDbType.Decimal) { Value = product.SalePrice });
-        command.Parameters.Add(new SqlParameter("_stock", System.Data.SqlDbType.Int) { Value = product.Stock });
-        command.Parameters.Add(new SqlParameter("_userId", System.Data.SqlDbType.BigInt) { Value = product.UserId });
-
-        connect.Open();
-        return command.ExecuteNonQuery();
-    }
-}*/

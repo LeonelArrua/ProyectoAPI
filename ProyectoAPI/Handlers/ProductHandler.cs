@@ -13,13 +13,13 @@ namespace ProyectoAPI.Handlers
 {
     internal static class ProductHandler
     {
-        public static string connectionString = "Data Source=DESKTOP-KTPC59F\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        
 
         internal static List<Product> getProductsFromDB(long id)
         {
             List<Product> products = new List<Product>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Producto WHERE idUsuario='{id}' ", connection);
                 connection.Open();
@@ -42,7 +42,7 @@ namespace ProyectoAPI.Handlers
         {
             Product products = new Product();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Producto WHERE Id='{id}' ", connection);
                 connection.Open();
@@ -63,7 +63,7 @@ namespace ProyectoAPI.Handlers
         {
             List<Product> products = new List<Product>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand($"SELECT * From Producto", connection);
                 connection.Open();
@@ -85,7 +85,7 @@ namespace ProyectoAPI.Handlers
 
         public static int insertProduct(Product product) {
 
-            using (SqlConnection connect = new SqlConnection(connectionString))
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand("INSERT INTO Producto(Descripciones,Costo,PrecioVenta,Stock,IdUsuario)" + "VALUES (@_description,@_price,@_salePrice,@_stock,@_userId)", connect);
 
@@ -101,7 +101,7 @@ namespace ProyectoAPI.Handlers
         }
 
         public static int updateProduct(Product product) {
-            using (SqlConnection connect = new SqlConnection(connectionString))
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring))
             {
                 SqlCommand command = new SqlCommand("UPDATE Producto SET Descripciones = @_description, Costo = @_price, PrecioVenta = @_salePrice, Stock = @_stock, IdUsuario = @_userId WHERE Id= @_id", connect);
 
@@ -120,10 +120,9 @@ namespace ProyectoAPI.Handlers
         public static int deleteProduct(long id) 
         {
 
-            using (SqlConnection connect = new SqlConnection(connectionString)) {
-
-                SqlCommand command = new SqlCommand("DELETE FROM Producto WHERE Id=@idUser", connect);
-                command.Parameters.Add(new SqlParameter("idUser", System.Data.SqlDbType.BigInt){ Value = id});
+            using (SqlConnection connect = new SqlConnection(Program.connectionstring)) {
+                SqlCommand command = new SqlCommand("DELETE FROM Producto WHERE Id=@id", connect);
+                command.Parameters.Add(new SqlParameter("id", System.Data.SqlDbType.BigInt){ Value = id});
                 connect.Open();
                 return command.ExecuteNonQuery();
             }
