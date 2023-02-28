@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoAPI.Handlers;
 using ProyectoAPI.Models;
+using System.Data.SqlClient;
+using System;
 
 namespace ProyectoAPI.Controllers
 {
@@ -9,17 +11,29 @@ namespace ProyectoAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        //Crear usuario
+        [HttpPost("/Usuario")]
+        public void CreateUser([FromBody] User usr) {
+            UserHandler.InsertUser(usr);
+        }
+        //Modificar Usuario
         [HttpPut]
-        public void ModifyUser([FromBody]User usr)
+        public void ModifyUser([FromBody] User usr)
         {
             UserHandler.ModifyUser(usr);
         }
-
-        [HttpGet("/User")]
-
-        public List<User> GetUsersFromDB()
+        //Inicio de sesión
+        [HttpGet("/Usuario/{usuario}/{contrasena})")]
+        public User LogginUser([FromRoute] string usuario, [FromRoute] string contrasena)
         {
-            return UserHandler.GetUsersFromDB();
+            return UserHandler.LogginUser(usuario, contrasena);
         }
+        [HttpGet("/Usuario")]
+        public User GetUserFromDB()
+        {
+            return UserHandler.GetUserFromDB();
+        }
+
     }
+
 }

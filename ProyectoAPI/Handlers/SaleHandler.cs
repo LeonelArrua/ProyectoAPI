@@ -45,12 +45,13 @@ namespace ProyectoAPI.Handlers
         }
         public static void insertSales(long UserId, List<Product> soldproducts) {
 
-            using (SqlConnection connect = new SqlConnection(Program.connectionstring)) {
+           
                 Sale sale = new Sale();
                 sale.UserId = UserId;
                 sale.Comments = "";
                 long SaleId = insertSale(sale);
-                foreach (Product product in soldproducts) { 
+                foreach (Product product in soldproducts)
+                { 
                         SoldProduct newsoldproduct = new SoldProduct();
                         newsoldproduct.ProductId = product.Id;
                         newsoldproduct.SalelId = SaleId;
@@ -58,7 +59,7 @@ namespace ProyectoAPI.Handlers
                         SoldProductHandler.insertSoldProduct(newsoldproduct);
                         ProductHandler.UpdateProductStock(product.Id, product.Stock);
                 }
-            }
+            
         }
     }
 }

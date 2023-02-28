@@ -11,14 +11,15 @@ namespace ProyectoAPI.Handlers
     internal static class SoldProductHandler
     {
        
-        public static List<Product> getSoldProductFromDB(long id)
+        public static List<SoldProduct> getSoldProductFromDB(long id)
         {
 
-            List<Product> soldproducts = new List<Product>();
+            List<SoldProduct> soldproducts = new List<SoldProduct>();
 
             using (SqlConnection connection = new SqlConnection(Program.connectionstring))
             {
-                SqlCommand command = new SqlCommand($"SELECT * FROM Producto INNER JOIN ProductoVendido ON Producto.Id = ProductoVendido.IdProducto WHERE Producto.idUsuario='{id}' ", connection);
+                //SqlCommand command = new SqlCommand($"SELECT * FROM Producto INNER JOIN ProductoVendido ON Producto.Id = ProductoVendido.IdProducto WHERE Producto.IdUsuario='{id}' ", connection);
+                SqlCommand command = new SqlCommand($"SELECT * FROM ProductoVendido INNER JOIN Venta ON ProductoVendido.IdVenta = Venta.Id WHERE Venta.IdUsuario='{id}' ", connection);
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -26,8 +27,7 @@ namespace ProyectoAPI.Handlers
                 {
                     while (reader.Read())
                     {
-
-                        Product aux = new Product(reader.GetInt64(0), reader.GetString(1), reader.GetDecimal(2), reader.GetDecimal(3), reader.GetInt32(4), reader.GetInt64(5));
+                        SoldProduct aux = new SoldProduct(reader.GetInt64(0), reader.GetInt32(1), reader.GetInt64(2), reader.GetInt64(3));
                         soldproducts.Add(aux);
                     }
                 }
@@ -37,7 +37,6 @@ namespace ProyectoAPI.Handlers
         }
         public static List<Product> getSoldProductFromDB()
         {
-
             List<Product> soldproducts = new List<Product>();
 
             using (SqlConnection connection = new SqlConnection(Program.connectionstring))
@@ -55,7 +54,6 @@ namespace ProyectoAPI.Handlers
                         soldproducts.Add(aux);
                     }
                 }
-
             }
             return soldproducts;
         }

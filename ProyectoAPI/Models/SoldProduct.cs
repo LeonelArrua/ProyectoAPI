@@ -9,14 +9,15 @@ namespace ProyectoAPI
     public class SoldProduct
     {
             private long _id;
+            private int _stock;
             private long _salelId;
             private long _productId;
-            private int _stock;
+            
 
         public SoldProduct()
         {
         }
-        public SoldProduct(long id, long salelId, long productId, int stock)
+        public SoldProduct(long id, int stock, long salelId, long productId)
         {
             Id = id;
             SalelId = salelId;

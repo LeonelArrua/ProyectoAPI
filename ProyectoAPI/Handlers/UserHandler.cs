@@ -56,9 +56,24 @@ namespace ProyectoAPI.Handlers
             }
             return auxuserlist;
         }
+        internal static User GetUserFromDB()
+        {
+            User auxuser = new User();
 
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring))
+            {
+                SqlCommand command = new SqlCommand($"SELECT * From Usuario ", connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
 
-
+                if (reader.HasRows)
+                {
+                        reader.Read();
+                        auxuser = new User(reader.GetInt64(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5));
+                }
+            }
+            return auxuser;
+        }
         public static User LogginUser(string user, string password)
         {
 
@@ -92,6 +107,21 @@ namespace ProyectoAPI.Handlers
                 command.Parameters.Add(new SqlParameter("_email", SqlDbType.VarChar) { Value = usr.Email });
                
 
+                connection.Open();
+                return command.ExecuteNonQuery();
+            }
+        }
+
+        public static int InsertUser(User usr) 
+        {
+            using (SqlConnection connection = new SqlConnection(Program.connectionstring)) 
+            {
+                SqlCommand command = new SqlCommand("INSERT INTO Usuario(Nombre,Apellido,NombreUsuario,Contraseña,Mail)" + "VALUES (@_firstname,@_lastname,@_username,@_password,@_mail)", connection);
+                command.Parameters.Add(new SqlParameter("_firstname", System.Data.SqlDbType.VarChar) { Value = usr.FirstName });
+                command.Parameters.Add(new SqlParameter("_lastname", System.Data.SqlDbType.VarChar) { Value = usr.LastName });
+                command.Parameters.Add(new SqlParameter("_username", System.Data.SqlDbType.VarChar) { Value = usr.UserName });
+                command.Parameters.Add(new SqlParameter("_password", System.Data.SqlDbType.VarChar) { Value = usr.Password });
+                command.Parameters.Add(new SqlParameter("_mail", System.Data.SqlDbType.VarChar) { Value = usr.Email });
                 connection.Open();
                 return command.ExecuteNonQuery();
             }

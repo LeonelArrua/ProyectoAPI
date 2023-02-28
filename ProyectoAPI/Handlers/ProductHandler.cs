@@ -50,6 +50,7 @@ namespace ProyectoAPI.Handlers
 
                 if (reader.HasRows)
                 {
+                    reader.Read();
                     products = new Product(reader.GetInt64(0), reader.GetString(1), reader.GetDecimal(2), reader.GetDecimal(3), reader.GetInt32(4), reader.GetInt64(5));
                 }
 

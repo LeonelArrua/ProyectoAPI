@@ -11,13 +11,20 @@ namespace ProyectoAPI.Controllers
     [ApiController]
     public class SaleController : ControllerBase
     {
-
-            [HttpPost("{UserId}")]
-            public void newSale([FromRoute] string UserId, [FromBody] List<Product> products)
+            //Nueva ventas
+            [HttpPost("/Venta/{idUsuario}")]
+            public void newSale([FromRoute] string idUsuario, [FromBody] List<Product> products)
             {
-                long id = Convert.ToInt64(UserId);
-                SaleHandler.insertSales(id, products);
+                long UserId = Convert.ToInt64(idUsuario);
+                SaleHandler.insertSales(UserId, products);
             }
-        
+            //Traer Ventas
+            [HttpGet("/Venta/{idUsuario}")]
+             public List<Sale> GetSales([FromRoute]string idUsuario)
+            {
+            long id = Convert.ToInt64(idUsuario);
+            return SaleHandler.getSalesFromDB(id);
+            }
+
     }
 }
